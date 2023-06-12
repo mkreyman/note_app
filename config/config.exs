@@ -59,6 +59,10 @@ config :phoenix, :json_library, Jason
 # Ash related for backwards compatibility
 config :ash, :use_all_identities_in_manage_relationship?, false
 
+config :note_app,
+  ash_apis: [NoteApp.Notes],
+  ecto_repos: [NoteApp.Repo]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

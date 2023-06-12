@@ -67,3 +67,13 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+# Configure your database
+config :note_app, NoteApp.Repo,
+  username: "postgres",
+  password: "Cran8Gat8",
+  hostname: "localhost",
+  database: "note_app_dev",
+  port: 5433,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
