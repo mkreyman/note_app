@@ -48,7 +48,8 @@ defmodule NoteApp.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:ash, "~> 2.9"},
-      {:ash_postgres, "~> 1.3"}
+      {:ash_postgres, "~> 1.3"},
+      {:earmark, "~> 1.4"}
     ]
   end
 
