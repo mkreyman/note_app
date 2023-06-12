@@ -33,7 +33,7 @@ defmodule NoteApp.Note do
       allow_nil? false
     end
 
-    # attribute :html, :string
+    attribute :html, :string
   end
 
   relationships do
