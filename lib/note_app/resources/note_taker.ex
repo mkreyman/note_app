@@ -3,7 +3,7 @@ defmodule NoteApp.NoteTaker do
 
   postgres do
     table "note_takers"
-    repo Helpdesk.Repo
+    repo NoteApp.Repo
   end
 
   actions do
