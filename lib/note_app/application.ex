@@ -8,6 +8,8 @@ defmodule NoteApp.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      # Start the Ecto repository
+      NoteApp.Repo,
       # Start the Telemetry supervisor
       NoteAppWeb.Telemetry,
       # Start the PubSub system
