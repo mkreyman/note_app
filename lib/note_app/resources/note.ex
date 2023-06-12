@@ -29,8 +29,6 @@ defmodule NoteApp.Note do
   attributes do
     uuid_primary_key :id
 
-    attribute :name, :string
-
     attribute :raw_text, :string do
       allow_nil? false
     end
