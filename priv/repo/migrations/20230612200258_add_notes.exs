@@ -10,7 +10,8 @@ defmodule NoteApp.Repo.Migrations.AddNotes do
   def up do
     create table(:notes, primary_key: false) do
       add(:id, :uuid, null: false, primary_key: true)
-      add(:raw_text, :text, null: false)
+      add(:title, :text, null: false)
+      add(:content, :text, null: false)
 
       add(
         :note_taker_id,

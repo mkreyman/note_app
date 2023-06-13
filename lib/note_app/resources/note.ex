@@ -17,7 +17,7 @@ defmodule NoteApp.Note do
     define :update, action: :update
     define :destroy, action: :destroy
     define :get_by_id, args: [:id], action: :by_id
-    define_calculation :html, args: [:raw_text]
+    define_calculation :html, args: [:content]
   end
 
   actions do
@@ -36,18 +36,22 @@ defmodule NoteApp.Note do
   end
 
   calculations do
-    calculate :html, :string, {Markdown, field: :raw_text}
+    calculate :html, :string, {Markdown, field: :content}
   end
 
   attributes do
     uuid_primary_key :id
 
-    attribute :raw_text, :string do
+    attribute :title, :string do
+      allow_nil? false
+    end
+
+    attribute :content, :string do
       allow_nil? false
     end
 
     attribute :note_taker_id, Ash.Type.UUID do
-      allow_nil? false
+      allow_nil? true
     end
   end
 

@@ -24,8 +24,8 @@ defmodule NoteApp.Calculations.Markdown do
     [opts[:field]]
   end
 
-  defp parse(raw_text) do
-    raw_text
+  defp parse(content) do
+    content
     |> Earmark.as_html!()
     |> parse_checkboxes()
   end
