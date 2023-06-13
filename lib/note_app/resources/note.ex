@@ -8,22 +8,6 @@ defmodule NoteApp.Note do
 
   actions do
     defaults [:create, :read, :update, :destroy]
-
-    create :take do
-      accept [:raw_text, :note_taker_id]
-    end
-
-    update :assign do
-      # No attributes should be accepted
-      accept []
-
-      argument :note_taker_id, :uuid do
-        allow_nil? false
-      end
-
-      # We use a change here to replace the related note_taker
-      change manage_relationship(:note_taker_id, :note_taker, type: :append_and_remove)
-    end
   end
 
   attributes do
@@ -34,11 +18,21 @@ defmodule NoteApp.Note do
     end
 
     attribute :html, :string
+
+    attribute :note_taker_id, Ash.Type.UUID do
+      allow_nil? false
+    end
   end
 
   relationships do
     belongs_to :note_taker, NoteApp.NoteTaker do
       attribute_writable? true
     end
+  end
+
+  def parse_markdown(changeset) do
+    raw_text = Ash.Changeset.get_attribute(changeset, :raw_text)
+    html = NoteApp.Markdown.parse(raw_text)
+    Ash.Changeset.change_attribute(changeset, :html, html)
   end
 end
