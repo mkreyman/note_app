@@ -65,7 +65,9 @@ defmodule NoteApp.MixProject do
       setup: ["deps.get", "assets.setup", "assets.build"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind default", "esbuild default"],
-      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"],
+      "db.reset": ["ash_postgres.drop", "ash_postgres.create", "ash_postgres.migrate"],
+      test: ["db.reset", "test"]
     ]
   end
 end

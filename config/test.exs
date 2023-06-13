@@ -29,5 +29,6 @@ config :note_app, NoteApp.Repo,
   password: "Cran8Gat8",
   hostname: "localhost",
   database: "note_app_test#{System.get_env("MIX_TEST_PARTITION")}",
+  port: 5433,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
