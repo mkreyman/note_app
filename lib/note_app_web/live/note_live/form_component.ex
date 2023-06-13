@@ -96,7 +96,7 @@ defmodule NoteAppWeb.NoteLive.FormComponent do
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 
-  defp ash_to_form(socket, %Ash.Changeset{action_type: :update} = changeset) do
+  defp ash_to_form(socket, %Ash.Changeset{action_type: :update}) do
     socket.assigns.note
     |> AshPhoenix.Form.for_update(:update,
       forms: [
@@ -112,7 +112,7 @@ defmodule NoteAppWeb.NoteLive.FormComponent do
     |> to_form()
   end
 
-  defp ash_to_form(socket, %Ash.Changeset{action_type: :edit} = changeset) do
+  defp ash_to_form(socket, %Ash.Changeset{action_type: :edit}) do
     socket.assigns.note
     |> AshPhoenix.Form.for_update(:update,
       forms: [
@@ -128,7 +128,7 @@ defmodule NoteAppWeb.NoteLive.FormComponent do
     |> to_form()
   end
 
-  defp ash_to_form(socket, %Ash.Changeset{action_type: action_type} = changeset) when action_type in [:new, :create] do
+  defp ash_to_form(_socket, %Ash.Changeset{action_type: action_type} = changeset) when action_type in [:new, :create] do
     changeset
     |> AshPhoenix.Form.for_create(:create,
       forms: [
