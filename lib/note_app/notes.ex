@@ -23,9 +23,6 @@ defmodule NoteApp.Notes do
 
   def list_notes!() do
     Note.read_all!
-      |> Enum.map(fn note ->
-        %Note{id: note.id, title: note.title, content: Note.html!(note.content) |> Phoenix.HTML.raw}
-      end)
   end
 
   @doc """

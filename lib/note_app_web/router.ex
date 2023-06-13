@@ -19,10 +19,6 @@ defmodule NoteAppWeb.Router do
 
     get "/", PageController, :home
 
-    # resources "/notes", NoteController
-
-    # live "/notes", NotesLiveView
-
     live "/notes", NoteLive.Index, :index
     live "/notes/new", NoteLive.Index, :new
     live "/notes/:id/edit", NoteLive.Index, :edit

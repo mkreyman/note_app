@@ -2,6 +2,7 @@ defmodule NoteAppWeb.NoteLive.FormComponent do
   use NoteAppWeb, :live_component
 
   alias NoteApp.Notes
+  alias NoteApp.Note
 
   @impl true
   def render(assigns) do
@@ -19,9 +20,9 @@ defmodule NoteAppWeb.NoteLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:title]} type="text" label="Title" />
-        <.input field={@form[:content]} type="text" label="Content" />
-        <.input field={@form[:note_taker_id]} type="text" label="Note taker" />
+        <.input field={AshPhoenix.Form.value(@form, :title)} type="text" label="Title" />
+        <.input field={AshPhoenix.Form.value(@form, :content)} type="textarea" label="Content" />
+        <.input field={AshPhoenix.Form.value(@form, :note_taker_id)} type="text" label="Note taker" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Note</.button>
         </:actions>
@@ -41,16 +42,21 @@ defmodule NoteAppWeb.NoteLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"note" => note_params}, socket) do
-    changeset =
-      socket.assigns.note
-      |> Notes.change_note(note_params)
-      |> Map.put(:action, :validate)
+  # def handle_event("validate", %{"note" => note_params}, socket) do
+  #   changeset =
+  #     socket.assigns.note
+  #     |> Notes.change_note(note_params)
+  #     |> Map.put(:action, :validate)
 
-    {:noreply, assign_form(socket, changeset)}
+  #   {:noreply, assign_form(socket, changeset)}
+  # end
+
+  def handle_event("validate", note_params, socket) do
+    form = AshPhoenix.Form.validate(socket.assigns.form, note_params)
+    {:noreply, assign(socket, form: form)}
   end
 
-  def handle_event("save", %{"note" => note_params}, socket) do
+  def handle_event("save", note_params, socket) do
     save_note(socket, socket.assigns.action, note_params)
   end
 
@@ -64,7 +70,7 @@ defmodule NoteAppWeb.NoteLive.FormComponent do
          |> put_flash(:info, "Note updated successfully")
          |> push_patch(to: socket.assigns.patch)}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, changeset} ->
         {:noreply, assign_form(socket, changeset)}
     end
   end
@@ -79,14 +85,62 @@ defmodule NoteAppWeb.NoteLive.FormComponent do
          |> put_flash(:info, "Note created successfully")
          |> push_patch(to: socket.assigns.patch)}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, changeset} ->
         {:noreply, assign_form(socket, changeset)}
     end
   end
 
-  defp assign_form(socket, %Ecto.Changeset{} = changeset) do
-    assign(socket, :form, to_form(changeset))
+  defp assign_form(socket, changeset) do
+    assign(socket, :form, ash_to_form(socket, changeset))
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
+
+  defp ash_to_form(socket, %Ash.Changeset{action_type: :update} = changeset) do
+    socket.assigns.note
+    |> AshPhoenix.Form.for_update(:update,
+      forms: [
+        notes: [
+          type: :list,
+          resource: Note,
+          create_action: :create,
+          update_action: :update
+        ]
+      ]
+    )
+    |> AshPhoenix.Form.add_form([:notes])
+    |> to_form()
+  end
+
+  defp ash_to_form(socket, %Ash.Changeset{action_type: :edit} = changeset) do
+    socket.assigns.note
+    |> AshPhoenix.Form.for_update(:update,
+      forms: [
+        notes: [
+          type: :list,
+          resource: Note,
+          create_action: :create,
+          update_action: :update
+        ]
+      ]
+    )
+    |> AshPhoenix.Form.add_form([:notes])
+    |> to_form()
+  end
+
+  defp ash_to_form(socket, %Ash.Changeset{action_type: action_type} = changeset) when action_type in [:new, :create] do
+    changeset
+    |> AshPhoenix.Form.for_create(:create,
+      forms: [
+        notes: [
+          type: :list,
+          resource: Note,
+          create_action: :create,
+          update_action: :update
+        ]
+      ]
+    )
+    |> AshPhoenix.Form.add_form([:notes])
+    |> to_form()
+  end
 end

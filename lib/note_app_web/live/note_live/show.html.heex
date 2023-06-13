@@ -2,7 +2,7 @@
   Note <%= @note.id %>
   <:subtitle>This is a note record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/notes/#{@note}/show/edit"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/notes/#{@note}/edit"} phx-click={JS.push_focus()}>
       <.button>Edit note</.button>
     </.link>
   </:actions>
@@ -10,7 +10,7 @@
 
 <.list>
   <:item title="Title"><%= @note.title %></:item>
-  <:item title="Content"><%= @note.content %></:item>
+  <:item title="Content"><%= raw(@note.content) %></:item>
   <:item title="Note taker"><%= @note.note_taker_id %></:item>
 </.list>
 

@@ -328,11 +328,11 @@ defmodule NoteAppWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div phx-feedback-for={@label |> String.downcase() |> String.replace(" ", "_")}>
       <.label for={@id}><%= @label %></.label>
       <textarea
         id={@id}
-        name={@name}
+        name={@label |> String.downcase() |> String.replace(" ", "_")}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
@@ -340,7 +340,7 @@ defmodule NoteAppWeb.CoreComponents do
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
-      ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
+      ><%= Phoenix.HTML.Form.normalize_value("textarea", @field) %></textarea>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
@@ -349,13 +349,13 @@ defmodule NoteAppWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div phx-feedback-for={@label |> String.downcase() |> String.replace(" ", "_")}>
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
-        name={@name}
+        name={@label |> String.downcase() |> String.replace(" ", "_")}
         id={@id}
-        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+        value={Phoenix.HTML.Form.normalize_value(@type, @field)}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
